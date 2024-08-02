@@ -10,9 +10,10 @@ const UserList = () => {
 
   //sorting part
   let [order, setOrder] = useState("asc");
-//filtering
+  //filtering
   const [filterGender, setFilterGender] = useState("");
   const [filterCountry, setFilterCountry] = useState("");
+  const [filter, setFilter] = useState({ gender: "", country: "" });
 
   //sorting
   let field = "";
@@ -68,55 +69,49 @@ const UserList = () => {
   };
 
   //!filtering
-  const handleGenderFilter = (e) => {
-    setFilterGender(e.target.value);
+  const handleFilterChange = (e) => {
+    setFilter({ ...filter, [e.target.name]: e.target.value });
   };
 
-  // Function to handle filtering by country
-  const handleCountryFilter = (e) => {
-    setFilterCountry(e.target.value);
-  };
-
-    // Apply gender filter
-  const filteredUsers = users.filter((user) => {
-    return !filterGender || user.gender === filterGender;
-    console.log(filteredUsers);
-  });
-
+  const filteredUsers = users.filter(
+    (user) =>
+      (filter.gender ? user.gender === filter.gender : true) &&
+      (filter.country ? user.country === filter.country : true)
+  );
 
   return (
     <>
-     <div className="start"> 
-      <h1>Employees</h1>
-      &nbsp;
-      <span className="filter">
-        <button>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill="brown"
-              d="M21 3H5a1 1 0 0 0-1 1v2.59c0 .523.213 1.037.583 1.407L10 13.414V21a1.002 1.002 0 0 0 1.447.895l4-2c.339-.17.553-.516.553-.895v-5.586l5.417-5.417c.37-.37.583-.884.583-1.407V4a1 1 0 0 0-1-1Zm-6.707 9.293A.997.997 0 0 0 14 13v5.382l-2 1V13a.996.996 0 0 0-.293-.707L6 6.59V5h14.001l.002 1.583-5.71 5.71Z"
-            ></path>
-          </svg>
-        </button>
-      </span>
-      <select value={filterCountry} onChange={handleCountryFilter}>
-        <option value="">Country</option>
-        <option value="United states">United states</option>
-        <option value="United states">Canada</option>
-      </select> &nbsp; &nbsp;
-      &nbsp;
-      <select value={filterGender} onChange={handleGenderFilter}>
-        <option value="">Gender</option>
-        <option value="female">Female</option>
-        <option value="male">Male</option>
-      </select>
+      <div className="start">
+        <h1>Employees</h1>
+        &nbsp;
+        <span className="filter">
+          <button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="brown"
+                d="M21 3H5a1 1 0 0 0-1 1v2.59c0 .523.213 1.037.583 1.407L10 13.414V21a1.002 1.002 0 0 0 1.447.895l4-2c.339-.17.553-.516.553-.895v-5.586l5.417-5.417c.37-.37.583-.884.583-1.407V4a1 1 0 0 0-1-1Zm-6.707 9.293A.997.997 0 0 0 14 13v5.382l-2 1V13a.996.996 0 0 0-.293-.707L6 6.59V5h14.001l.002 1.583-5.71 5.71Z"
+              ></path>
+            </svg>
+          </button>
+        </span>
+        <select value={filterCountry} onChange={handleFilterChange}>
+          <option value="">Country</option>
+          <option value="United states">United states</option>
+          <option value="United states">Canada</option>
+        </select> 
+        &nbsp; &nbsp; &nbsp;
+        <select value={filterGender} onChange={handleFilterChange}>
+          <option value="">Gender</option>
+          <option value="female">Female</option>
+          <option value="male">Male</option>
+        </select>
       </div>
- <hr />
+      <hr />
 
       <div className="row">
         <InfiniteScroll
@@ -150,13 +145,8 @@ const UserList = () => {
                   </button>
                 </th>
                 <th>Designation</th>
-                <th>
-                  Location
-                  
-                </th>
-             
+                <th>Location</th>
               </tr>
-              
             </thead>
             <hr />
             <tbody>
